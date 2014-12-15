@@ -96,6 +96,49 @@ tags: C++
         - order members of struct by size to minimize wasted spaces from holes
 
     - *Statements*
+        - declaration inside `if`
+
+            ```cpp
+            if (int d = n % 4) {
+                d--;
+            } else {
+                d++;
+            }
+            ```
+        - `for(auto x: obj) { ... }` is equivalent to both
+            - `for (auto x = obj.begin(); x != obj.end(); x++) { ... }`
+            - `for (auto x = begin(obj); x != end(obj); x++) { ... }`
+            using this fact we can design our own iterables
+
+            ```cpp
+            struct range {
+                int a, b, p;
+                range (int a, int b): a(a), b(b) {}
+                int operator * () const {
+                    return p;
+                }
+                range& begin () {
+                    this->p = a;
+                    return *this;
+                }
+                range& end () {
+                    this->p = b;
+                    return *this;
+                }
+                bool operator != (const range& that) const {
+                    return p != that.p;
+                }
+                range& operator ++ () {
+                    this->p++;
+                    return *this;
+                }
+            };
+            ...
+            for (auto x : range(4, 1000)) {
+                cout << x << endl;
+            }
+
+            ```
 
     - *Expressions*
 
