@@ -11,7 +11,7 @@ relative_permalinks: true
 
 # Setup
 title:            Notes
-baseurl:          /
+baseurl:          /notes
 
 author:
   name:           'Dhananjoy Biswas'
