@@ -1,7 +1,9 @@
 ---
 layout: page
-title: The C++ Programming Language - Bjarne Stroustrup
+title: The C++ Programming Language
+author: Bjarne Stroustrup
 category: Programming
+tags: C++
 ---
 - **Part I - Introductory Materials**
     - *Abstraction Mechanisms*
