@@ -65,26 +65,19 @@
         - int  &  & is an int&
 
     - *Structures, Unions, and Enumerations*
-        
+        - order members of struct by size to minimize wasted spaces from holes
 
     - *Statements*
-        -
 
     - *Expressions*
-        -
 
     - *Select Operations*
-        -
 
     - *Functions*
-        -
 
     - *Exception Handling*
-        -
 
     - *Namespaces*
-        -
 
     - *Source Files and Programs*
-        -
 
