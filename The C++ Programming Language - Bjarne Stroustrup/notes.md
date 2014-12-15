@@ -5,7 +5,8 @@
         - move constructors (75)
         - suppressing operations (77)
             Using the default copy or move for a class in a hierarchy is typically a disaster: given only a pointer to a base, we simply don’t know what members the derived class has (§3.2.2), so we can’t know how to copy them. So, the best thing to do is usually to delete the default copy and move operations, that is, to eliminate the default definitions of those two operations:
-        
+            
+            ```cpp
             class Shape {
             public:
                 // no copy operations
@@ -16,21 +17,31 @@
                 Shape& operator=(Shape&&) = delete;
                 ~Shape();
             };
+            ```
         - variadic templates (82)
+
+            ```cpp
             template<typename T, typename ... Tail>
             void f(T head, Tail... tail) {
                 g(head); // do something to head
                 f(tail...); // try again with tail
             }
+            ```
         - return containers by value (relying on move for efficiency); §3.3.2
         - aliases (84)
+
+            ```cpp
             template<typename Value> using String_map = Map<string,Value>;
             
             String_map<int> m; // m is a Map<str ing,int>
             template<typename T> using Iterator<T> = typename T::iterator;
+            ```
         - ::value_type
+
+            ```cpp
             vector <int> v;
             v::value_type a = *v.begin();
+            ```
 
     - *Containers and Algorithms*
         - back_inserter (103)
@@ -41,15 +52,24 @@
 - **Part II - Basic Facilities**
     - *Types and Declarations*
         - function with postfix return
+
+            ```cpp
             auto f (int n) -> int {...}
+            ```
         - the type of an expression is never a reference because references are implicitly dereferenced in expressions (§7.7)
+
+            ```cpp
             void g(int& v) {
                 auto x = v; // x is an int (not an int&)
                 auto& y = v; // y is an int&
             }
+            ```
         - usage of decltype
+
+            ```cpp
             template<class T, class U>
             auto operator + (const Matrix<T>& a, const Matrix<U>& b) −> Matrix<decltype(T()+U())>;
+            ```
         - lvalue: has identity but not movable
         - xvalue: has identity and movable
         - glvalue: generalized lvalue, has identity
