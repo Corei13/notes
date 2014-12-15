@@ -1,5 +1,5 @@
 <div class="sidebar">
-  <div class="container sidebar-sticky">
+  <div class="container">
     <div class="sidebar-about">
       <h1>
         <a href="{{ site.baseurl }}README">
@@ -24,7 +24,13 @@
         {% endif %}
       {% endfor %}
 
-      <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a>
+<!--       <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a> -->
     </nav>
+  </div>
+  <div class="container sidebar-sticky" style="font-size:12px">
+    <a href = "{{ site.github.repo }}" target="_blank">
+      <img src="{{site.baseurl}}/public/github.png"/>
+    </a>
+    <div>Powered by <a href="https://github.com/poole/hyde">Hyde</a></div>
   </div>
 </div>

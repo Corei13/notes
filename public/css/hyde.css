@@ -55,7 +55,7 @@ html {
 
 .sidebar {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 1rem 0rem;
   color: rgba(255,255,255,.5);
   background-color: #202020;
 }
@@ -73,6 +73,15 @@ html {
 /* Sidebar links */
 .sidebar a {
   color: #fff;
+}
+
+.sidebar img {
+  height: 3rem;
+  width: 3rem;
+  margin: 0rem;
+  padding: 4px;
+  display: inline-block;
+  position: relative;
 }
 
 /* About section */
@@ -110,6 +119,8 @@ a.sidebar-nav-item:focus {
   .sidebar-sticky {
     position: absolute;
     right:  1rem;
+    bottom: 0.5rem;
+    left:   0rem;
   }
 }
 
@@ -121,7 +132,7 @@ a.sidebar-nav-item:focus {
  */
 
 .content {
-  padding-top:    4rem;
+  padding-top:    1rem;
   padding-bottom: 4rem;
 }
 
@@ -160,8 +171,8 @@ a.sidebar-nav-item:focus {
 
 @media (min-width: 64em) {
   .layout-reverse .content {
-    margin-left: 4rem;
-    margin-right: 22rem;
+    margin-left: 0rem;
+    margin-right: 16rem;
   }
 }
 
