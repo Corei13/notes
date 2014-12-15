@@ -1,3 +1,7 @@
+---
+layout: page
+title: The C++ Programming Language - Bjarne Stroustrup
+---
 - **Part I - Introductory Materials**
     - *Abstraction Mechanisms*
         - implementation inheritance (70)
@@ -68,7 +72,7 @@
 
             ```cpp
             template<class T, class U>
-            auto operator + (const Matrix<T>& a, const Matrix<U>& b) −> Matrix<decltype(T()+U())>;
+            auto operator + (const Matrix<T>& a, const Matrix<U>& b) -> Matrix<decltype(T()+U())>;
             ```
         - lvalue: has identity but not movable
         - xvalue: has identity and movable
@@ -79,10 +83,10 @@
     - *Pointers, Arrays, and References*
         - `char ∗const cp; // const pointer to char`
         - `char const∗ pc; // pointer to const char`
-        - `int && &&` is an int&&
-        - `int &&  &` is an int&
-        - `int  & &&` is an int&
-        - `int  &  &` is an int&
+        - `int && &&` is an `int&&`
+        - `int &&  &` is an `int&`
+        - `int  & &&` is an `int&`
+        - `int  &  &` is an `int&`
 
     - *Structures, Unions, and Enumerations*
         - order members of struct by size to minimize wasted spaces from holes
