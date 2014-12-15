@@ -22,13 +22,17 @@
 
         
 
-      {% assign pages_list = site.pages %}
+      {% assign pages_list = site.pages%}
       {% for section in site.sections%}
         <b class="sidebar-nav-item">{{ section }}</b>
         {% for node in pages_list %}
           {% if node.category == section%}
             {% if node.layout == "page" %}
-              <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a>
+              <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{site.baseurl}}{{ node.url }}">
+              {{ node.title }}
+              <br/>
+              - <small>{{ node.author }}</small>
+              </a>
             {% endif %}
           {% endif %}
         {% endfor %}

@@ -75,7 +75,7 @@ html {
   color: #fff;
 }
 
-.sidebar b + a {
+.sidebar b ~ a {
   color: #ccc;
   padding-left: 1rem;
 }
