@@ -1,6 +1,7 @@
 ---
 layout: page
 title: The C++ Programming Language - Bjarne Stroustrup
+category: Programming
 ---
 - **Part I - Introductory Materials**
     - *Abstraction Mechanisms*
@@ -15,17 +16,17 @@ title: The C++ Programming Language - Bjarne Stroustrup
             public:
                 // no copy operations
                 Shape(const Shape&) = delete;
-                Shape& operator=(const Shape&) = delete;
+                Shape& operator = (const Shape&) = delete;
                 // no move operations
                 Shape(Shape&&) = delete;
-                Shape& operator=(Shape&&) = delete;
+                Shape& operator = (Shape&&) = delete;
                 ~Shape();
             };
             ```
         - variadic templates (82)
 
             ```cpp
-            template<typename T, typename ... Tail>
+            template <typename T, typename ... Tail>
             void f(T head, Tail... tail) {
                 g(head); // do something to head
                 f(tail...); // try again with tail
@@ -35,10 +36,10 @@ title: The C++ Programming Language - Bjarne Stroustrup
         - aliases (84)
 
             ```cpp
-            template<typename Value> using String_map = Map<string,Value>;
+            template <typename Value> using String_map = Map<string,Value>;
             
-            String_map<int> m; // m is a Map<str ing,int>
-            template<typename T> using Iterator<T> = typename T::iterator;
+            String_map <int> m; // m is a Map<str ing,int>
+            template <typename T> using Iterator<T> = typename T::iterator;
             ```
         - ::value_type
 
@@ -58,7 +59,7 @@ title: The C++ Programming Language - Bjarne Stroustrup
         - function with postfix return
 
             ```cpp
-            auto f (int n) -> int {...}
+            auto f(int n) -> int {...}
             ```
         - the type of an expression is never a reference because references are implicitly dereferenced in expressions (§7.7)
 
@@ -71,8 +72,8 @@ title: The C++ Programming Language - Bjarne Stroustrup
         - usage of decltype
 
             ```cpp
-            template<class T, class U>
-            auto operator + (const Matrix<T>& a, const Matrix<U>& b) -> Matrix<decltype(T()+U())>;
+            template <class T, class U>
+            auto operator + (const Matrix <T>& a, const Matrix <U>& b) -> Matrix <decltype(T()+U())>;
             ```
         - lvalue: has identity but not movable
         - xvalue: has identity and movable
