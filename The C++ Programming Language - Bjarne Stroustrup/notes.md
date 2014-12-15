@@ -77,12 +77,12 @@
         - rvalue: movable
 
     - *Pointers, Arrays, and References*
-        - char ∗const cp; // const pointer to char
-        - char const∗ pc; // pointer to const char       
-        - int && && is an int&&
-        - int &&  & is an int&
-        - int  & && is an int&
-        - int  &  & is an int&
+        - `char ∗const cp; // const pointer to char`
+        - `char const∗ pc; // pointer to const char`
+        - `int && &&` is an int&&
+        - `int &&  &` is an int&
+        - `int  & &&` is an int&
+        - `int  &  &` is an int&
 
     - *Structures, Unions, and Enumerations*
         - order members of struct by size to minimize wasted spaces from holes
