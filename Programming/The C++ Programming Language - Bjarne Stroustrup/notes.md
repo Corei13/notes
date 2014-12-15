@@ -3,6 +3,7 @@ layout: page
 title: The C++ Programming Language - Bjarne Stroustrup
 category: Programming
 ---
+
 - **Part I - Introductory Materials**
     - *Abstraction Mechanisms*
         - implementation inheritance (70)

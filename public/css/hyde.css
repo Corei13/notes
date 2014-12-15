@@ -75,6 +75,11 @@ html {
   color: #fff;
 }
 
+.sidebar b + a {
+  color: #ccc;
+  padding-left: 1rem;
+}
+
 .sidebar img {
   height: 3rem;
   width: 3rem;

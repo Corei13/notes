@@ -1,3 +1,8 @@
+<script type="text/javascript">
+  console.log({{site | jsonify}});
+  console.log({{page | jsonify}});
+</script>
+
 <div class="sidebar">
   <div class="container">
     <div class="sidebar-about">
@@ -15,13 +20,18 @@
         `layout: page` in the front-matter. See readme for usage.
       {% endcomment %}
 
+        
+
       {% assign pages_list = site.pages %}
-      {% for node in pages_list %}
-        {% if node.title != null %}
-          {% if node.layout == "page" %}
-            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a>
+      {% for section in site.sections%}
+        <b class="sidebar-nav-item">{{ section }}</b>
+        {% for node in pages_list %}
+          {% if node.category == section%}
+            {% if node.layout == "page" %}
+              <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a>
+            {% endif %}
           {% endif %}
-        {% endif %}
+        {% endfor %}
       {% endfor %}
 
 <!--       <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a> -->
