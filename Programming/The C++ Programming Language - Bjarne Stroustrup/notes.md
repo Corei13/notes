@@ -94,6 +94,13 @@ tags: C++
 
     - *Structures, Unions, and Enumerations*
         - order members of struct by size to minimize wasted spaces from holes
+        - it is possible to initialize `struct` members by initializer list
+
+            ```cpp
+            struct A {
+                int a {5};
+            };
+            ```
 
     - *Statements*
         - declaration inside `if`
@@ -139,10 +146,19 @@ tags: C++
             }
 
             ```
+        - use `for (declaration; condition;) {}` instead of `declaration; while(condition) {}`
 
     - *Expressions*
+        - `isspace()`, `inalpha()`, `isdigit()`, `isalnum()` (251)
+        - `b = (a = 2, a + 1)` assigns `3` to `b`
+        - literal Types (265)
+        - no naked new
 
     - *Select Operations*
+    - `const_cast` converts between types that differ only in const and volatile qualifiers (§iso.5.2.11)
+    - `static_cast` converts between related types such as one pointer type to another in the same class hierarchy, an integral type to an enumeration, or a floating-point type to an integral type. It also does conversions defined by constructors (§16.2.6, §18.3.3, §iso.5.2.9) and conversion operators (§18.4)
+    - `reinterpret_cast` handles conversions between unrelated types such as an integer to a pointer or a pointer to an unrelated pointer type (§iso.5.2.10)
+    - `dynamic_cast` does run-time checked conversion of pointers and references into a class hierarchy (§22.2.1, §iso.5.2.7)
 
     - *Functions*
 
