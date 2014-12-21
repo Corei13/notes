@@ -84,7 +84,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .5rem;
   font-weight: bold;
   line-height: 1.25;
-  color: #313131;
   text-rendering: optimizeLegibility;
 }
 h1 {
@@ -212,9 +211,9 @@ pre code {
 
 /* Quotes */
 blockquote {
-  padding: .5rem 1rem;
+  padding: 0rem 1rem;
   margin: .8rem 0;
-  color: #7a7a7a;
+  /*color: #7a7a7a;*/
   border-left: .25rem solid #e5e5e5;
 }
 blockquote p:last-child {
@@ -222,8 +221,8 @@ blockquote p:last-child {
 }
 @media (min-width: 30em) {
   blockquote {
-    padding-right: 5rem;
-    padding-left: 1.25rem;
+    /*padding-right: 5rem;*/
+    padding-left: 1rem;
   }
 }
 
