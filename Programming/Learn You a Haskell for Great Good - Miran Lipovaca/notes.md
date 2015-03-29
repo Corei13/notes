@@ -254,7 +254,7 @@ tags: Haskell
             case <expression> of pattern -> result
                                  pattern -> result
                                  pattern -> result
-            ...
+                                 ...
             ```
             Example:
 
@@ -270,6 +270,16 @@ tags: Haskell
             ```
 - **Chapter 4 - Hello Recursion!**
     - *4.1 - Maximum Awesome*
+    - *4.2 - A Few More Recursive Functions*
+    - *4.3 - Quick, Sort!*
+
+        ```haskell
+        quicksort :: (Ord a) => [a] -> [a]
+        quicksort [] = []
+        quicksort x:xs = quicksort left ++ [x] ++ quicksort right
+            where left = [a | a <- xs, a <= x]
+                  right = [a | a <- xs, a > x]
+        ```
 
 
 
