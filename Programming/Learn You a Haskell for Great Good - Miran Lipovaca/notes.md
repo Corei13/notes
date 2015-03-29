@@ -255,6 +255,7 @@ tags: Haskell
                                  pattern -> result
                                  pattern -> result
             ...
+            ```
             Example:
 
             ```haskell
