@@ -13,7 +13,7 @@ tags: Haskell
         - Function application has the highest precedence
             `succ 9 + max 5 4 + 1` is equivalent to `(succ 9) + (max 5 4) + 1`
         - If a function takes two parameters, we can also call it as an infix function by surrounding it with backticks
-            `div 92 10` is equivalent to `92 `div` 10`
+            `div 92 10` is equivalent to ``92 `div` 10``
     - *2.2 - Baby's First Functions*
         - `doubleMe x = x + x`
         - if must have an else
@@ -32,29 +32,23 @@ tags: Haskell
             - 'let' keyword is used to define names in GHCI
 
                 ```haskell
-                > let lostNumbers = [4,8,15,16,23,42]
-                > lostNumbers
-                [4,8,15,16,23,42]
+                let lostNumbers = [4,8,15,16,23,42]
+                lostNumbers -- [4,8,15,16,23,42]
                 ```
             - single quote means character, double quotes means string
             - string is just a list of characters
             - lists can be contenated by `++` operator, complexity is linear
 
                 ```haskell
-                > [1,2,3,4] ++ [9,10,11,12]
-                [1,2,3,4,9,10,11,12]
-                > "hello" ++ " " ++ "world"
-                "hello world"
-                > ['w','o'] ++ ['o','t']
-                "woot"
+                [1,2,3,4] ++ [9,10,11,12] -- [1,2,3,4,9,10,11,12]
+                "hello" ++ " " ++ "world" -- "hello world"
+                ['w','o'] ++ ['o','t'] -- "woot"
                 ```
             - `:` operator (or *cons* operator) adds an element at the begining of a lost (`O(1)`)
 
                 ```haskell
-                > 'A':" SMALL CAT"
-                "A SMALL CAT"
-                > 5:[1,2,3,4,5]
-                [5,1,2,3,4,5]
+                'A':" SMALL CAT" -- "A SMALL CAT"
+                5:[1,2,3,4,5] -- [5,1,2,3,4,5]
                 ```
             - `[1, 2, 3]` is equivalent to `1:2:3:[]`
             - `!!` operator is used to access list elements, `[9.4,33.2,96.2,11.2,23.25] !! 1` is 33.2
