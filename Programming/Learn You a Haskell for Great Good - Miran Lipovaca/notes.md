@@ -210,7 +210,65 @@ tags: Haskell
                 | otherwise     = "You're a whale, congratulations!"
                 where bmi = weight / height ^ 2 -- all variable names must be aligned in a single column
                       (skinny, normal, fat) = (18.5, 25.0, 30.0)
+
+            initials :: String -> String -> String
+            initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
+                where (f:_) = firstname
+                      (l:_) = lastname
+
+            calcBmis :: [(Double, Double)] -> [Double]
+            calcBmis xs = [bmi w h | (w, h) <- xs]
+                where bmi weight height = weight / height ^ 2
             ```
+    - *3.4 - let It Be*
+        - `let <bindings> in <expression>`
+            
+            ```haskell
+            cylinder :: Double -> Double -> Double
+            cylinder r h =
+                let sideArea = 2 * pi * r * h
+                    topArea = pi * r ^ 2
+                in sideArea + 2 * topArea
+            ```
+
+        - `let` is an expression, so it has a value
+        - `let` can be separated with semicolons in the same line
+
+            ```haskell
+            4 * (let a = 9 in a + 1) + 2 -- 42
+            let square x = x * x in (square 5, square 3, square 2) -- (25, 9, 4)
+
+            (let (a, b, c) = (1, 2, 3) in a*b*c, let foo="Hey "; bar = "there!" in foo ++ bar) -- (6,"Hey there!")
+            ```
+        - 'let' in list comprehension
+
+            
+            ```haskell
+            calcBmis :: [(Double, Double)] -> [Double]
+            calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi > 25.0]
+            ```
+            The `(w, h) <- xs` is called *generator*. `bmi` can't be refered in the generator, because that is defined prior to the `let` binding.
+        - `case` expression
+
+            ```
+            case <expression> of pattern -> result
+                                 pattern -> result
+                                 pattern -> result
+            ...
+            Example:
+
+            ```haskell
+            head' :: [a] -> a
+            head' xs = case xs of [] -> error "No head for empty lists!"
+                                  (x:_) -> x
+
+            describeList :: [a] -> String
+            describeList ls = "The list is " ++ case ls of [] -> "empty."
+                                                           [x] -> "a singleton list."
+                                                           xs -> "a longer list."
+            ```
+- **Chapter 4 - Hello Recursion!**
+    - *4.1 - Maximum Awesome*
 
 
 
