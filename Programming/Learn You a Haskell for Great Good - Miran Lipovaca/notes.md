@@ -31,7 +31,7 @@ tags: Haskell
             - list must contain elements of same type
             - 'let' keyword is used to define names in GHCI
 
-                ```
+                ```haskell
                 > let lostNumbers = [4,8,15,16,23,42]
                 > lostNumbers
                 [4,8,15,16,23,42]
@@ -40,7 +40,7 @@ tags: Haskell
             - string is just a list of characters
             - lists can be contenated by `++` operator, complexity is linear
 
-                ```
+                ```haskell
                 > [1,2,3,4] ++ [9,10,11,12]
                 [1,2,3,4,9,10,11,12]
                 > "hello" ++ " " ++ "world"
@@ -50,7 +50,7 @@ tags: Haskell
                 ```
             - `:` operator (or *cons* operator) adds an element at the begining of a lost (`O(1)`)
 
-                ```
+                ```haskell
                 > 'A':" SMALL CAT"
                 "A SMALL CAT"
                 > 5:[1,2,3,4,5]
@@ -61,67 +61,41 @@ tags: Haskell
             - lists are compared in lexicographical order
             - some list operations
 
-                ```
-                > head [5,4,3,2,1]
-                5
-                > tail [5,4,3,2,1]
-                [4,3,2,1]
-                > last [5,4,3,2,1]
-                1
-                > init [5,4,3,2,1]
-                [5,4,3,2]
-                > length [5,4,3,2,1]
-                5
-                > null [1,2,3]
-                False
-                > null []
-                True
-                > reverse [5,4,3,2,1]
-                [1,2,3,4,5]
-                > take 3 [5,4,3,2,1]
-                [5,4,3]
-                > take 5 [1,2]
-                [1,2]
-                > drop 3 [8,4,2,1,5,6]
-                [1,5,6]
-                > drop 100 [1,2,3,4]
-                []
-                > minimum [8,4,2,1,5,6]
-                1
-                > maximum [1,9,2,3,4]
-                9
-                > sum [5,2,1,6,3,2,5,7]
-                31
-                > product [6,2,1,2]
-                24
-
-                > elem 5 [1,3,5,7]
-                True
-                > elem 4 [1,3,5,7]
-                False
+                ```haskell
+                head [5,4,3,2,1] -- 5
+                tail [5,4,3,2,1] -- [4,3,2,1]
+                last [5,4,3,2,1] -- 1
+                init [5,4,3,2,1] -- [5,4,3,2]
+                length [5,4,3,2,1] -- 5
+                null [1,2,3] -- False
+                null [] -- True
+                reverse [5,4,3,2,1] -- [1,2,3,4,5]
+                take 3 [5,4,3,2,1] -- [5,4,3]
+                take 5 [1,2] -- [1,2]
+                drop 3 [8,4,2,1,5,6] -- [1,5,6]
+                drop 100 [1,2,3,4] -- []
+                minimum [8,4,2,1,5,6] -- 1
+                maximum [1,9,2,3,4] -- 9
+                sum [5,2,1,6,3,2,5,7] -- 31
+                product [6,2,1,2] -- 24
+                elem 5 [1,3,5,7] -- True
+                elem 4 [1,3,5,7] -- False
                 ```
         - *2.4 - Texas Ranges*
             - range example
 
-                ```
-                > ['K'..'Z']
-                "KLMNOPQRSTUVWXYZ"
-                > [3,6..20]
-                [3,6,9,12,15,18]
-                > [5,4..1]
-                [5,4,3,2,1]
-                > [13,26..]
-                [13,26,39,52,...]
+                ```haskell
+                ['K'..'Z'] -- "KLMNOPQRSTUVWXYZ"
+                [3,6..20] -- [3,6,9,12,15,18]
+                [5,4..1] -- [5,4,3,2,1]
+                [13,26..] -- [13,26,39,52,...]
                 ```
             - new functions
 
-                ```
-                > cycle [1,2,3]
-                [1,2,3,1,2,3,...]
-                > repeat 5
-                [5,5,5,...]
-                > replicate 3 10
-                [10,10,10]
+                ```haskell
+                cycle [1,2,3] -- [1,2,3,1,2,3,...]
+                repeat 5 -- [5,5,5,...]
+                replicate 3 10 -- [10,10,10]
                 ```
 
 
