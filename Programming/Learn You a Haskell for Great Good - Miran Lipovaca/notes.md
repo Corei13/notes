@@ -280,8 +280,39 @@ tags: Haskell
             where left = [a | a <- xs, a <= x]
                   right = [a | a <- xs, a > x]
         ```
+- **Chapter 5 - Higher-Order Functions**
+    - *5.1 - Curried Functions*
+        - Infix functions can be curried by *sections*. ``a `func` b`` is equivalent to ``(`func` b) a``
+        - Be careful about negetive numbers. `(-4)` should have been ``(subtract 4)``, instead it is just `-4`
+    - *5.2 - Some Higher-Orderism Is in Order*
+        - Implementing flip
+
+            ```haskell
+            flip' :: (a -> b -> c) -> (b -> a -> c)
+            flip' f = g
+                where g x y = f y x
+            -- another version
+            flip' f y x = f x y -- this works because flip' f x y also defines flip' f x and flip' f
+            ```
+    - *5.3 - The Functional Programmer’s Toolbox*
+        - `takeWhile :: (a -> Bool) -> [a] -> [a]` returns begining of a list until `f` is true
+
+            ```haskell
+            takeWhile (< 5) [1..] -- [1, 2, 3, 4]
+            ```
+    - *5.4 - Lambdas*
+        - Examples
+
+            ```haskell
+            map (\(a,b) -> a + b) [(1,2),(3,5),(6,3),(2,6),(2,5)] -- [3,8,9,8,7]
+
+            flip' :: (a -> b -> c) -> b -> a -> c
+            flip' f = \x y -> f y x -- \x y -> (f x y)
 
 
+            addThree :: Int -> Int -> Int -> Int
+            addThree' = \x -> \y -> \z -> x + y + z -- (\x -> (\y -> (\z -> x + y + z)))
+            ```
 
 
 
