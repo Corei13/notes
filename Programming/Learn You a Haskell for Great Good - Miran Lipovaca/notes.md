@@ -338,6 +338,48 @@ tags: Haskell
         scanl (+) 0 [3,5,2,1] -- [0,3,8,10,11]
         scanr (+) 0 [3,5,2,1] -- [11,8,3,1,0]
         ```
+    - *5.6 - Function Application with $*
+        - *Function Application Operator* `$` is defined as
+            
+            ```haskell
+            ($) :: (a -> b) -> a -> b
+            f $ x = f x
+            ```
+        - It has lowest precedence, hence right associative
+            
+            ```haskell
+            f a b c -- ((f a) b) c
+            f $ g $ h $ a -- f (g (h a))
+            ```
+        - It allows to treat function application like another function
+
+            ```haskell
+            ($ a) f -- f a
+            map ($ 3) [(4+), (10*), (^2), sqrt] -- [7.0,30.0,9.0,1.7320508075688772]
+            ```
+    - *5.7 - Function Composition*
+        - *Function Composition Operator* `.` is defined as
+            
+            ```haskell
+            (.) :: (b -> c) -> (a -> b) -> a -> c
+            f . g = \x -> f (g x)
+            ```
+        - It is right associative
+        - It is used to write functions in *point-free* style
+
+        ```haskell
+        map (negate . sum . tail) [[1..5],[3..6],[1..7]] -- [-14,-15,-27]
+
+        replicate 2 (product (map (*3) (zipWith max [1,2] [4,5])))
+        -- can be turned into
+        replicate 2 $ product $ map (*3) $ zipWith max [1,2] [4,5]
+        -- which is equivalent to
+        replicate 2 . product . map (*3) $ zipWith max [1,2] [4,5]
+
+        fn x = ceiling (negate (tan (cos (max 50 x))))
+        -- can be rewritten in point-free style as
+        fn = ceiling . negate . tan . cos . max 50
+        ```
 
 
 
