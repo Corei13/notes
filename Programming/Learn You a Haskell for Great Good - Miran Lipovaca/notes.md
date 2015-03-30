@@ -313,6 +313,31 @@ tags: Haskell
             addThree :: Int -> Int -> Int -> Int
             addThree' = \x -> \y -> \z -> x + y + z -- (\x -> (\y -> (\z -> x + y + z)))
             ```
+        - I Fold You So
+            - `foldl acc init [x1, x2, ..., xn] = acc (... (acc init x1) ...) xn`
+            - `foldr acc init [x1, x2, ..., xn] = acc x1 (... (acc xn init) ...)`
+            - `foldr` works on infinite list
+            - The `scanl` and `scanr` functions are like foldl and foldr, except they report all the intermediate accumulator states in the form of a list
+
+            ```haskell
+            sum' :: (Num a) => [a] -> a
+            sum' = foldl (\acc x -> acc + x) 0 -- foldl (+) 0
+
+            map' :: (a -> b) -> [a] -> [b]
+            map' f = foldr (\x acc -> f x : acc) []
+
+            elem' :: (Eq a) => a -> [a] -> Bool
+            elem' y ys = foldr (\x acc -> if x == y then True else acc) False ys
+
+            reverse' :: [a] -> [a]
+            reverse' = foldl (\acc x -> x : acc) [] -- foldl (flip(:)) []
+
+            filter' :: (a -> Bool) -> [a] -> [a]
+            filter' f = foldr (\x acc -> if f x then x : acc else acc) []
+
+            scanl (+) 0 [3,5,2,1] -- [0,3,8,10,11]
+            scanr (+) 0 [3,5,2,1] -- [11,8,3,1,0]
+            ```
 
 
 
