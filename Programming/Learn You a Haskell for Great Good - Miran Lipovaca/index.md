@@ -518,6 +518,27 @@ tags: Haskell
         (Point 6 7) == (Point 6 7) -- True
         show $ Point 6 7 -- "Point {x = 6, y = 7}"
         read "Point {x = 6, y = 7}" :: Point Int -- Point {x = 6, y = 7}
+        read "Point {x = 6, y = 7}" == Point 8 9 -- :: Point Int part is not needed because haskell can now deduce the type from Point 8 9
+
+
+        data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday deriving (Eq, Ord, Show, Read, Bounded, Enum)
+    
+        Monday < Friday -- True
+        minBound :: Day -- Monday
+        maxBound :: Day -- Sunday
+        succ Monday -- Tuesday
+        pred Saturday -- Friday
+        [Thursday .. Sunday] -- [Thursday,Friday,Saturday,Sunday]
+        [minBound .. maxBound] :: [Day] -- [Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday]
+        ```
+
+        - If two values were made using the same constructor, they are considered to be equal, unless they have fields. If they have fields, the fields are compared to see which is greater. (in this case, the types of the fields also must be part of the Ord type class.)
+
+            ```haskell
+            data Maybe a = Nothing | Just a deriving (Eq, Ord)
+
+            Nothing < Just 100 -- True, because Nothing is declared before Just
+            Just 100 > Just 50 -- True, because Just 100 > Just 50 is reduced to 100 > 50
 
 
 
