@@ -276,7 +276,7 @@ tags: Haskell
         ```haskell
         quicksort :: (Ord a) => [a] -> [a]
         quicksort [] = []
-        quicksort x:xs = quicksort left ++ [x] ++ quicksort right
+        quicksort (x:xs) = quicksort left ++ [x] ++ quicksort right
             where left = [a | a <- xs, a <= x]
                   right = [a | a <- xs, a > x]
         ```
@@ -380,9 +380,90 @@ tags: Haskell
         -- can be rewritten in point-free style as
         fn = ceiling . negate . tan . cos . max 50
         ```
+- **Chapter 6 - Modules**
+    - *6.1 - Importing Modules*
 
+        ```haskell
+        import Data.List -- imports Data.List module
+        :m + Data.List Data.Map Data.Set -- imports modules in ghci
+        import Data.List (nub, sort) -- imports nub and sort functions from Data.List
+        import Data.List hiding (nub, sort) -- imports everything but nub and sort from Data.List
+        import qualified Data.Map (filter) -- imports filter from Data.Map, but filter should be accessed as Data.Map.filter
+        import qualified Data.Map as M (filter) -- imports filter from Data.Map, but filter should be accessed as M.filter
+        ```
+    - *6.2 - Solving Problems with Module Functions*
+        - Some functions
 
+            ```haskell
+            import Data.List (group, sort, words, tails, isPrefixOf, isInfixOf, any, all, foldl', foldr')
 
+            words "hey these are the words in this sentence" -- ["hey","these","are","the","words","in","this","sentence"]
+            group [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7] -- [[1,1,1,1],[2,2,2,2],[3,3],[2,2,2],[5],[6],[7]]
+            sort "abracadabra" -- aaaaabbcdrr
+            tails [1,2,3] -- [[1,2,3],[2,3],[3],[]]
+            hawaii" `isPrefixOf` "hawaii joe" -- True
+            "art" `isInfixOf` "party" -- True
+            any (>5) [1..] -- True
+            all (>5) [1..] -- False
+            foldl (+) 0 (replicate 10000000 1) -- Stack Overflow
+            foldl' (+) 0 (replicate 10000000 1) -- 10000000, foldl' doesn't defer computation
+
+            import Data.Char (ord, chr, digitToInt)
+
+            ord 'a' -- 97
+            chr 97 -- 'a'
+            map digitToInt (['0'..'9']++['A'..'F']++['a'..'f']) -- [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,10,11,12,13,14,15]
+
+            ```
+        - `find` function has type `(a -> Bool) -> [a] -> Maybe a`
+
+            ```haskell
+            find (<4) [1..] -- Just 4
+            find (<4) [4..] -- Nothing
+            ```
+    - *6.3 - Mapping Keys to Values*
+        - `O(n)` association-list implementation
+
+            ```haskell
+            findKey :: (Eq k) => k -> [(k, v)] -> Maybe v
+            findKey key xs = foldr (\(k, v) acc -> if key == k then Just v else acc) Nothing xs
+            ```
+        - `Data.Map` examples
+
+            ```haskell
+            import qualified Data.Map as Map
+
+            -- Map.fromList :: (Ord k) => [(k, v)] -> Map.Map k v
+            -- takes a list of pairs and returns a map from type k to v
+            squares = Map.fromList [(i, i^2) | i <- [1..5]]
+            Map.lookup 4 squares -- Just 16
+            Map.lookup 6 squares -- Nothing
+
+            -- Map.insert :: (Ord k) => k -> a -> Map.Map k a -> Map.Map k a
+            squares' = Map.insert 6 (6^2) squares
+            Map.lookup 6 squares' -- Just 36
+
+            -- Map.size :: Map.Map k a -> Int
+            Map.size squares -- 5
+
+            -- Map.fromListWith :: Ord k => (a -> a -> a) -> [(k, a)] -> Map.Map k a
+            -- Takes a function and apply that on duplicates
+            Map.fromListWith (++) [(1, [1]), (1, [2]), (2, [1])] -- fromList [(1,[2,1]),(2,[1])]
+            Map.fromListWith max [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)] -- fromList [(2,100),(3,29),(4,22)]
+    - *6.4 - Making Our Own Modules*
+        - Sample module
+
+            ```haskell
+            module TestModule ( test ) where
+            test x = x ^ 2 -- export
+            test' x = x ^ 3 -- doesn't export
+            ```
+        - Submodules resides under directory of parent modules
+        
+            ```haskell
+            module TestModule.SubModule ( test ) where
+            test x = x ^ 2 -- export
+            ```
 
 
 
