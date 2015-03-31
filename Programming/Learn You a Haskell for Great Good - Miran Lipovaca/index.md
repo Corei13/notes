@@ -472,6 +472,7 @@ tags: Haskell
         
         :t True -- Bool
         :t False -- Bool
+        ```
     - *7.2 - Shaping Up*
         
         ```haskell
