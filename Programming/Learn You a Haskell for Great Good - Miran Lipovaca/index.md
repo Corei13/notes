@@ -539,8 +539,13 @@ tags: Haskell
 
             Nothing < Just 100 -- True, because Nothing is declared before Just
             Just 100 > Just 50 -- True, because Just 100 > Just 50 is reduced to 100 > 50
+            ```
+    - *7.6 - Type Synonyms*
+        - Type synonyms are used to give some types different names
 
-
+            ```haskell
+            type String = [Char]
+            ```
 
 
 
