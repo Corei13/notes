@@ -459,11 +459,67 @@ tags: Haskell
             test' x = x ^ 3 -- doesn't export
             ```
         - Submodules resides under directory of parent modules
-        
+
             ```haskell
             module TestModule.SubModule ( test ) where
             test x = x ^ 2 -- export
             ```
+- **Chapter 7 - Making Our Own Types And Type Classes**
+    - *7.1 - Defining a New Data Type*
+
+        ```haskell
+        data Bool = False | True
+        
+        :t True -- Bool
+        :t False -- Bool
+    - *7.2 - Shaping Up*
+        
+        ```haskell
+        data Point = Point Float Float deriving (Show)
+        data Shape = Circle Point Float | Rectangle Point Point deriving (Show)
+        
+        :t Circle -- Point -> Float -> Shape
+        :t Rectangle -- Point -> Point -> Shape
+        
+        area :: Shape -> Float
+        area (Circle _ r) = pi * r ^ 2
+        area (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
+        ```
+        - To export constructor from module use `(..)`
+
+            ```haskell
+            module Point ( Point(..), ... ) where
+            ...
+            ```
+    - *7.3 - Record Syntax*
+
+        ```haskell
+        data Point = Point {x :: Int, y :: Int} deriving (Show)
+
+        Point 8 9 -- Point {x = 8, y = 9}
+        Point {y = 8, x = 9} -- Point {x = 9, y = 8}
+        x $ Point 6 7 -- 6
+        ```
+    - *7.4 - Type Parameters*
+
+        ```haskell
+        data Vector a = Vector a a a deriving (Show)
+
+        vplus :: (Num a) => Vector a -> Vector a -> Vector a
+        -- Note that we used Vector a instead of Vector a a a
+        -- because Vector a a a is the constructor but Vector a is Type
+        (Vector i j k) `vplus` (Vector l m n) = Vector (i+l) (j+m) (k+n)
+        ```
+    - *7.5 - Derived Instances*
+
+        ```haskell
+        data Point a = Point {x :: a, y :: a} deriving (Eq, Show, Read)
+    
+        (Point 6 7) == (Point 6 7) -- True
+        show $ Point 6 7 -- "Point {x = 6, y = 7}"
+        read "Point {x = 6, y = 7}" :: Point Int -- Point {x = 6, y = 7}
+
+
 
 
 
