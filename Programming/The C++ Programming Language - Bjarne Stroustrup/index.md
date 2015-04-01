@@ -5,7 +5,6 @@ author: Bjarne Stroustrup
 category: Programming
 tags: C++
 ---
-
 - **Part I - Introductory Materials**
     - *Abstraction Mechanisms*
         - implementation inheritance (70)
@@ -54,6 +53,8 @@ tags: C++
     - *Containers and Algorithms*
         - back_inserter (103)
         - stream iterators (106)
+        - `vector <bool>` is space optimized
+        - `vector <bool>::flip()` flips all value
 
     - *Concurrency and Utilities*
 
@@ -155,12 +156,27 @@ tags: C++
         - no naked new
 
     - *Select Operations*
-    - `const_cast` converts between types that differ only in const and volatile qualifiers (§iso.5.2.11)
-    - `static_cast` converts between related types such as one pointer type to another in the same class hierarchy, an integral type to an enumeration, or a floating-point type to an integral type. It also does conversions defined by constructors (§16.2.6, §18.3.3, §iso.5.2.9) and conversion operators (§18.4)
-    - `reinterpret_cast` handles conversions between unrelated types such as an integer to a pointer or a pointer to an unrelated pointer type (§iso.5.2.10)
-    - `dynamic_cast` does run-time checked conversion of pointers and references into a class hierarchy (§22.2.1, §iso.5.2.7)
+        - `const_cast` converts between types that differ only in const and volatile qualifiers (§iso.5.2.11)
+        - `static_cast` converts between related types such as one pointer type to another in the same class hierarchy, an integral type to an enumeration, or a floating-point type to an integral type. It also does conversions defined by constructors (§16.2.6, §18.3.3, §iso.5.2.9) and conversion operators (§18.4)
+        - `reinterpret_cast` handles conversions between unrelated types such as an integer to a pointer or a pointer to an unrelated pointer type (§iso.5.2.10)
+        - `dynamic_cast` does run-time checked conversion of pointers and references into a class hierarchy (§22.2.1, §iso.5.2.7)
 
     - *Functions*
+        - it is possible to return void function from a void function
+
+            ```cpp
+            void g () { ... }
+            void f () { return g();}
+            ```
+        - type reference to array as function parameter `void f(int(&r)[4]);`
+        - type reference can be used to deduce array size in template
+
+            ```cpp
+            template<class T, int N>
+            void f(T(&r)[N]) {
+                cout << N  << endl;
+            }
+            ```
 
     - *Exception Handling*
 
