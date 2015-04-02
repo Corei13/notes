@@ -542,10 +542,11 @@ tags: Haskell
             Just 100 > Just 50 -- True, because Just 100 > Just 50 is reduced to 100 > 50
             ```
     - *7.6 - Type Synonyms*
-        - Type synonyms are used to give some types different names
+        - Type synonyms are used to give some types different names. They, too, can be parameterized.
 
             ```haskell
             type String = [Char]
+            type AssocList k v = [(k, v)]
             ```
 
 
