@@ -4,6 +4,7 @@ title: Learn You a Haskell for Great Good
 author: Miran Lipovaca
 category: Programming
 tags: Haskell
+ISBN: 1593272839
 ---
 
 - **Chapter 1 - Starting Out**
@@ -222,7 +223,7 @@ tags: Haskell
             ```
     - *3.4 - let It Be*
         - `let <bindings> in <expression>`
-            
+
             ```haskell
             cylinder :: Double -> Double -> Double
             cylinder r h =
@@ -242,7 +243,7 @@ tags: Haskell
             ```
         - 'let' in list comprehension
 
-            
+
             ```haskell
             calcBmis :: [(Double, Double)] -> [Double]
             calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi > 25.0]
@@ -340,13 +341,13 @@ tags: Haskell
         ```
     - *5.6 - Function Application with $*
         - *Function Application Operator* `$` is defined as
-            
+
             ```haskell
             ($) :: (a -> b) -> a -> b
             f $ x = f x
             ```
         - It has lowest precedence, hence right associative
-            
+
             ```haskell
             f a b c -- ((f a) b) c
             f $ g $ h $ a -- f (g (h a))
@@ -359,7 +360,7 @@ tags: Haskell
             ```
     - *5.7 - Function Composition*
         - *Function Composition Operator* `.` is defined as
-            
+
             ```haskell
             (.) :: (b -> c) -> (a -> b) -> a -> c
             f . g = \x -> f (g x)
@@ -469,19 +470,19 @@ tags: Haskell
 
         ```haskell
         data Bool = False | True
-        
+
         :t True -- Bool
         :t False -- Bool
         ```
     - *7.2 - Shaping Up*
-        
+
         ```haskell
         data Point = Point Float Float deriving (Show)
         data Shape = Circle Point Float | Rectangle Point Point deriving (Show)
-        
+
         :t Circle -- Point -> Float -> Shape
         :t Rectangle -- Point -> Point -> Shape
-        
+
         area :: Shape -> Float
         area (Circle _ r) = pi * r ^ 2
         area (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
@@ -515,7 +516,7 @@ tags: Haskell
 
         ```haskell
         data Point a = Point {x :: a, y :: a} deriving (Eq, Show, Read)
-    
+
         (Point 6 7) == (Point 6 7) -- True
         show $ Point 6 7 -- "Point {x = 6, y = 7}"
         read "Point {x = 6, y = 7}" :: Point Int -- Point {x = 6, y = 7}
@@ -523,7 +524,7 @@ tags: Haskell
 
 
         data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday deriving (Eq, Ord, Show, Read, Bounded, Enum)
-    
+
         Monday < Friday -- True
         minBound :: Day -- Monday
         maxBound :: Day -- Sunday
@@ -548,6 +549,235 @@ tags: Haskell
             type String = [Char]
             type AssocList k v = [(k, v)]
             ```
+        - `Either` data type
+
+            ```haskell
+            data Either a b = Left a | Right b deriving (Eq, Ord, Read, Show)
+            ```
+    - *7.7 - Recursive data structures*
+        - Defining custop list
+
+            ```haskell
+            data List a = Empty | Cons { listHead :: a, listTail :: List a} deriving (Show, Read, Eq, Ord)
+
+            a = Cons 1 $ Cons 2 $ Cons 3 $ Empty
+            listHead a -- 1
+            listTail a -- Cons {listHead = 2, listTail = Cons {listHead = 3, listTail = Empty}}
+            ```
+        - fixity declarations
+
+            ```haskell
+            infixr 5 :-:
+            -- infixr means the :-: operator is right associative
+            -- 5 is called fixity, which states the precedence of the operator (0-9)
+            -- for example, * has fixity 7, + has 6
+            data List a = Empty | a :-: (List a) deriving (Show, Read, Eq, Ord)
+
+            (3 :-: 4 :-: 5 :-: Empty) -- 3 :-: (4 :-: (5 :-: Empty))
+
+            -- :-: can noe be used to match pattern
+            infixr 5  .++
+            (.++) :: List a -> List a -> List a
+            Empty .++ ys = ys
+            (x :-: xs) .++ ys = x :-: (xs .++ ys) -- :-: is used in pattern
+            ```
+        - Binary Search Tree
+
+            ```haskell
+            data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show, Read, Eq)
+
+            treeInsert :: (Ord a) => a -> Tree a -> Tree a
+            treeInsert x EmptyTree = Node x EmptyTree EmptyTree
+            treeInsert x (Node a left right)
+                | x < a     = Node a (treeInsert x left) right
+                | x > a     = Node a left (treeInsert x right)
+                | otherwise = (Node a left right)
+
+            treeElem :: (Ord a) => a -> Tree a -> Bool
+            treeElem x EmptyTree = False
+            treeElem x (Node a left right)
+                | x < a     = treeElem x left
+                | x > a     = treeElem x right
+                | otherwise = True
+
+            tree = foldr treeInsert EmptyTree [8,6,1,7,3]
+            -- Node 3 (Node 1 EmptyTree EmptyTree) (Node 7 (Node 6 EmptyTree EmptyTree) (Node 8 EmptyTree EmptyTree))
+            treeElem 6 tree -- True
+            treeElem 5 tree -- False
+            ```
+    - *7.8 - Typeclasses 102*
+        - Typeclass definition example
+
+            ```haskell
+            class Eq a where
+                (==) :: a -> a -> Bool
+                (/=) :: a -> a -> Bool
+                x == y = not (x /= y)
+                x /= y = not (x == y)
+            ```
+            Because `==` was defined in terms of `/=` and vice versa in the class declaration, we only had to overwrite one of them in the instance declaration. That's called the minimal complete definition for the typeclass — the minimum of functions that we have to implement so that our type can behave like the class advertises. To fulfill the minimal complete definition for Eq, we have to overwrite either one of `==` or `/=`.
+        - Examples of typeclass instanciation
+
+            ```haskell
+            data TrafficLight = Red | Yellow | Green
+
+            instance Eq TrafficLight where
+                Red == Red = True
+                Green == Green = True
+                Yellow == Yellow = True
+                _ == _ = False
+                -- note that /= are defined if == are defined
+
+            instance Show TrafficLight where
+                show Red = "Red light"
+                show Yellow = "Yellow light"
+                show Green = "Green light"
+            ```
+        - Defining typeclasses which are subclasses of other typeclasses
+
+            ```haskell
+            class (Eq a) => Num a where
+                ...
+            ```
+        - Some examples
+
+            ```haskell
+            instance Eq Maybe where
+                ...
+            -- invalid,  Maybe is not a concrete type
+            -- but function parameters must be of concrete type
+            -- so (==) :: Maybe -> Maybe -> Bool is invalid
+
+            instance Eq (Maybe m) where
+                Just x == Just y = x == y
+                Nothing == Nothing = True
+                _ == _ = False
+            -- valid, but will fail if Type m is not a subclass of Eq
+
+            instance (Eq m) => Eq (Maybe m) where
+                Just x == Just y = x == y
+                Nothing == Nothing = True
+                _ == _ = False
+            -- always valid
+            ```
+        - `:info` in GHCI
+
+            ```haskell
+            > :info Num
+
+            class Num a where
+                (+) :: a -> a -> a
+                (*) :: a -> a -> a
+                (-) :: a -> a -> a
+                negate :: a -> a
+                abs :: a -> a
+                signum :: a -> a
+                fromInteger :: Integer -> a
+                    -- Defined in `GHC.Num'
+            instance Num Integer -- Defined in `GHC.Num'
+            instance Num Int -- Defined in `GHC.Num'
+            instance Num Float -- Defined in `GHC.Float'
+            instance Num Double -- Defined in `GHC.Float'
+
+            > :info (+)
+
+            class Num a where
+                (+) :: a -> a -> a
+                ...
+                    -- Defined in `GHC.Num'
+            infixl 6 +
+
+            > :info elem
+
+            elem :: Eq a => a -> [a] -> Bool    -- Defined in `GHC.List'
+            infix 4 `elem`
+            ```
+    - *7.9 - A yes-no typeclass*
+    - *7.10 - The Functor typeclass*
+
+        ```haskell
+        class Functor f where
+            fmap :: (a -> b) -> f a -> f b
+        ```
+        - Example on list
+
+            ```haskell
+            instance Functor [] where
+                fmap = map
+            ```
+            `[]` is a type constructor, for example `[] Int` produces type `[Int]`
+        - Example on Maybe type
+
+            ```haskell
+            instance Functor Maybe where
+                fmap f (Just x) = Just (f x)
+                fmap f Nothing = Nothing
+            ```
+        - Example on `Tree` defined in 7.7
+
+            ```haskell
+            instance Functor Tree where
+                fmap f EmptyTree = EmptyTree
+                fmap f (Node x leftsub rightsub) = Node (f x) (fmap f leftsub) (fmap f rightsub)
+            ```
+    - *7.11 - Kinds and some type-foo*
+
+        > Type constructors take other types as parameters to eventually produce concrete types. That kind of reminds me of functions, which take values as parameters to produce values. We've seen that type constructors can be partially applied (Either String is a type that takes one type and produces a concrete type, like Either String Int), just like functions can.
+
+        ```haskell
+        > :k Int
+        Int :: *
+        -- A * means that the type is a concrete type. A concrete type is a type that doesn't take any type parameters and values can only have types that are concrete types.
+
+        > :k Maybe
+        Maybe :: * -> *
+        -- The Maybe type constructor takes one concrete type (like Int) and then returns a concrete type like Maybe Int
+
+        > :k Either
+        Either :: * -> * -> *
+        -- This tells us that Either takes two concrete types as type parameters to produce a concrete type.
+
+        > :k Either String
+        Either String :: * -> *
+
+        class Tofu t where
+            tofu :: j a -> t a j
+        -- a has kind *, hence j has kind * -> *
+        -- so t has kind * -> (* -> *) -> *
+
+        data Frank a b  = Frank {frankField :: b a} deriving (Show)
+        -- An example of kind * -> (* -> *) -> *
+
+        > :k Frank
+        * -> (* -> *) -> *
+        > :t Frank {frankField = Just "HAHA"}
+        Frank {frankField = Just "HAHA"} :: Frank [Char] Maybe
+        > :t Frank {frankField = "YES"}
+        Frank {frankField = "YES"} :: Frank Char []
+
+        -- Making Frank an instance of Tofu
+        instance Tofu Frank where
+            tofu x = Frank x
+        -- Equivalent to tofu (j a) = Frank {frankField = j a}
+        -- Which is of type t a j, where t = Frank
+
+        data Barry t k p = Barry { yabba :: p, dabba :: t k } deriving (Show)
+
+        > :k Barry
+        Barry :: (* -> *) -> * -> * -> *
+
+        instance Functor (Barry a b) where
+            -- fmap :: (a -> b) -> Barry c d a -> Barry c d b
+            fmap f (Barry {yabba = x, dabba = y}) = Barry {yabba = f x, dabba = y}
+
+        fmap (^9) $ Barry 2 (Just 9) :: Barry Maybe Int Int
+        -- Barry {yabba = 512, dabba = Just 9}
+        ```
+
+- **Chapter 8 - Input And Output**
+    - *8.1 - Separating the Pure from the Impure*
+    - *8.2 - Hello, World!
+
 
 
 
