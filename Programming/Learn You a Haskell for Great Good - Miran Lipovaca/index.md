@@ -788,12 +788,7 @@ ISBN: 1593272839
         putStrLn :: String -> IO () -- putStrLn returns an IO action that has result type ()
         ```
     - *8.3 - Gluing I/O Actions Together*
-        - `getLine` is an I/O action that yields a `String`
-
-            ```haskell
-            > :t getLine
-            getLine :: IO String
-            ```
+        - `getLine :: IO String` is an I/O action that yields a `String`
         - `<-` construct is used to bind IO results to a name
 
             ```haskell
@@ -812,12 +807,12 @@ ISBN: 1593272839
                 let hello = "Hello, World!"
                 putStrLn hello
             ```
-        - `return :: Monad m => a -> m a` makes an IO action that yields a result
+        - `return :: Monad m => a -> m a`
 
             ```haskell
             > a <- return 4 :: IO Int
             -- equivalent to let a = 4 :: Int
-            ``
+            ```
             (using `return` doesn’t cause the I/O do block to end its execution)
     - *8.4 - Some Useful I/O Functions*
 
@@ -833,7 +828,6 @@ ISBN: 1593272839
             putStrLn input
 
         forever -- Monad m => m a -> m b
-        -- takes an I/O action and returns an I/O action that just repeats the I/O action it got forever.
         forever $ do
             l <- getLine
             putStrLn l
@@ -865,7 +859,7 @@ ISBN: 1593272839
                 contents <- getContents
                 putStr . unlines . map (\w -> ">> " ++ w) . words $ contents
             ```
-        - `lines` split a string at '\n', `unlines` is the inverse of `lines`
+        - `lines` split a string at `\n`, `unlines` is the inverse of `lines`
         - `interact :: (String -> String) -> IO ()` takes a function as parameter and returns an IO action that will take some input, run that function on it, and then print out the function's result.
 
             ```haskell
@@ -922,12 +916,13 @@ ISBN: 1593272839
 
         ```haskell
         import System.Environment
+        import Data.List
 
         main = do
             args <- getArgs
             progName <- getProgName
             putStrLn "The arguments are:"
-            mapM putStrLn args
+            mapM_ putStrLn args
             putStrLn "The program name is:"
             putStrLn progName
         ```
