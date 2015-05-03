@@ -722,7 +722,7 @@ ISBN: 1593272839
             ```
     - *7.11 - Kinds and some type-foo*
 
-        > Type constructors take other types as parameters to eventually produce concrete types. That kind of reminds me of functions, which take values as parameters to produce values. We've seen that type constructors can be partially applied (Either String is a type that takes one type and produces a concrete type, like Either String Int), just like functions can.
+        > Type constructors take other types as parameters to eventually produce concrete types. That kind of reminds us of functions, which take values as parameters to produce values. We've seen that type constructors can be partially applied (`Either String` is a type that takes one type and produces a concrete type, like `Either String Int`), just like functions can.
 
         ```haskell
         > :k Int
@@ -773,10 +773,167 @@ ISBN: 1593272839
         fmap (^9) $ Barry 2 (Just 9) :: Barry Maybe Int Int
         -- Barry {yabba = 512, dabba = Just 9}
         ```
-
 - **Chapter 8 - Input And Output**
     - *8.1 - Separating the Pure from the Impure*
-    - *8.2 - Hello, World!
+    - *8.2 - Hello, World!*
+
+        ```haskell
+        -- helloworld.hs
+        main = putStrLn "hello, world"
+
+        -- $ ghc --make helloworld
+        -- $ ./helloworld
+
+        :t putStrLn
+        putStrLn :: String -> IO () -- putStrLn returns an IO action that has result type ()
+        ```
+    - *8.3 - Gluing I/O Actions Together*
+        - `getLine` is an I/O action that yields a `String`
+
+            ```haskell
+            > :t getLine
+            getLine :: IO String
+            ```
+        - `<-` construct is used to bind IO results to a name
+
+            ```haskell
+            name <- getLine
+            -- getLine returns a IO String
+            -- hence name has type String
+
+            _ <- putStrLn "Hello World!"
+            -- putStrLn retuns a IO ()
+            -- hence _ has type ()
+            ```
+        - `let` is used inside `do` block to bind pure values to names
+
+            ```haskell
+            main = do
+                let hello = "Hello, World!"
+                putStrLn hello
+            ```
+        - `return :: Monad m => a -> m a` makes an IO action that yields a result
+
+            ```haskell
+            > a <- return 4 :: IO Int
+            -- equivalent to let a = 4 :: Int
+            ``
+            (using `return` doesn’t cause the I/O do block to end its execution)
+    - *8.4 - Some Useful I/O Functions*
+
+        ```haskell
+        putStr -- String -> IO ()
+        putStrLn -- String -> IO ()
+        putChar -- Char -> IO ()
+        print -- Show a => a -> IO ()
+
+        -- import Control.Monad (when, forever)
+        when -- Monad m => Bool -> m () -> m ()
+        when (input == "SWORDFISH") $ do
+            putStrLn input
+
+        forever -- Monad m => m a -> m b
+        -- takes an I/O action and returns an I/O action that just repeats the I/O action it got forever.
+        forever $ do
+            l <- getLine
+            putStrLn l
+
+        sequence -- Monad m => [m a] -> m [a]
+        res <- sequence $ map print [1..3]
+        -- prints 1..3 and res becomes [(), (), ()]
+
+        mapM -- Monad m => (a -> m b) -> [a] -> m [b]
+        mapM_ -- Monad m => (a -> m b) -> [a] -> m ()
+        -- mapM f a = sequence $ map f a
+
+        -- import Control.Monad (forM, forM_)
+        forM -- Monad m => [a] -> (a -> m b) -> m [b]
+        forM_ -- Monad m => [a] -> (a -> m b) -> m ()
+        -- same as mapM but parameters reversed
+        do
+            lines <- forM [1..5] $ \a -> do
+                line <- readLn :: IO Int
+                return $ line * line
+            mapM_ print lines
+        ```
+- **Chapter 9 - More Input And More Output**
+    - *9.1 - Files and Streams*
+        - `getContents :: IO String` reads everything from stdio (lazily) until EOF
+
+            ```haskell
+            main = do
+                contents <- getContents
+                putStr . unlines . map (\w -> ">> " ++ w) . words $ contents
+            ```
+        - `lines` split a string at '\n', `unlines` is the inverse of `lines`
+        - `interact :: (String -> String) -> IO ()` takes a function as parameter and returns an IO action that will take some input, run that function on it, and then print out the function's result.
+
+            ```haskell
+            main = interact shortLinesOnly
+
+            shortLinesOnly :: String -> String
+            shortLinesOnly = unlines . filter (\line -> length line < 10) . lines
+            ```
+    - *9.2 - Reading and Writing Files*
+        - `Handle`
+            
+            ```haskell
+            import System.IO
+            
+            main = do
+                handle <- openFile "sample.txt" ReadMode
+                -- openFile :: FilePath -> IOMode -> IO Handle
+                -- type FilePath = String
+                -- data IOMode = ReadMode | WriteMode | AppendMode | ReadWriteMode
+
+                contents <- hGetContents handle
+                -- hGetContents :: Handle -> IO String
+                
+                putStr contents
+                hClose handle
+                -- hClose :: Handle -> IO ()
+            ```
+        - `withFile :: FilePath -> IOMode -> (Handle -> IO a) -> IO a`
+
+            ```haskell
+            import System.IO
+
+            main = do
+                withFile "sample.txt" ReadMode $ \handle -> do
+                    contents <- hGetContents handle
+                    putStr contents
+            ```
+        - `bracket :: IO a -> (a -> IO b) -> (a -> IO c) -> IO c` takes a resource, a function that releases that resource and another function that returns some other resource. Implementation of `withFile` with `bracket`:
+
+            ```haskell
+            import Control.Exception (bracket)
+
+            withFile :: FilePath -> IOMode -> (Handle -> IO a) -> IO a
+            withFile name mode f = bracket (openFile name mode)
+                (\handle -> hClose handle)
+                (\handle -> f handle)
+            ```
+        - Other common IO functions
+            - `readFile :: FilePath -> IO String`
+            - `writeFile :: FilePath -> String -> IO ()`
+            - `appendFile :: FilePath -> String -> IO ()`
+    - *9.3 - To-Do Lists*
+    - *9.4 - Command-Line Arguments*
+
+        ```haskell
+        import System.Environment
+
+        main = do
+            args <- getArgs
+            progName <- getProgName
+            putStrLn "The arguments are:"
+            mapM putStrLn args
+            putStrLn "The program name is:"
+            putStrLn progName
+        ```
+
+
+
 
 
 
