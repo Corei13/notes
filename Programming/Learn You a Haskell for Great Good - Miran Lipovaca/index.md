@@ -363,23 +363,23 @@ ISBN: 1593272839
 
             ```haskell
             (.) :: (b -> c) -> (a -> b) -> a -> c
-            f . g = \x -> f (g x)
+            f.g = \x -> f (g x)
             ```
         - It is right associative
         - It is used to write functions in *point-free* style
 
         ```haskell
-        map (negate . sum . tail) [[1..5],[3..6],[1..7]] -- [-14,-15,-27]
+        map (negate.sum.tail) [[1..5],[3..6],[1..7]] -- [-14,-15,-27]
 
         replicate 2 (product (map (*3) (zipWith max [1,2] [4,5])))
         -- can be turned into
         replicate 2 $ product $ map (*3) $ zipWith max [1,2] [4,5]
         -- which is equivalent to
-        replicate 2 . product . map (*3) $ zipWith max [1,2] [4,5]
+        replicate 2.product.map (*3) $ zipWith max [1,2] [4,5]
 
         fn x = ceiling (negate (tan (cos (max 50 x))))
         -- can be rewritten in point-free style as
-        fn = ceiling . negate . tan . cos . max 50
+        fn = ceiling.negate.tan.cos.max 50
         ```
 - **Chapter 6 - Modules**
     - *6.1 - Importing Modules*
@@ -857,7 +857,7 @@ ISBN: 1593272839
             ```haskell
             main = do
                 contents <- getContents
-                putStr . unlines . map (\w -> ">> " ++ w) . words $ contents
+                putStr.unlines.map (\w -> ">> " ++ w).words $ contents
             ```
         - `lines` split a string at `\n`, `unlines` is the inverse of `lines`
         - `interact :: (String -> String) -> IO ()` takes a function as parameter and returns an IO action that will take some input, run that function on it, and then print out the function's result.
@@ -866,7 +866,7 @@ ISBN: 1593272839
             main = interact shortLinesOnly
 
             shortLinesOnly :: String -> String
-            shortLinesOnly = unlines . filter (\line -> length line < 10) . lines
+            shortLinesOnly = unlines.filter (\line -> length line < 10).lines
             ```
     - *9.2 - Reading and Writing Files*
         - `Handle`
@@ -926,8 +926,100 @@ ISBN: 1593272839
             putStrLn "The program name is:"
             putStrLn progName
         ```
+    - *9.5 - More Fun with To-Do Lists*
+    - *9.6 - Randomness*
 
+        ```haskell
+        import System.Random
 
+        random :: (RandomGen g, Random a) => g -> (a, g)
+        -- takes a random number generator and returns a random number and a new random number generator
+        mkStdGen :: Int -> StdGen
+        -- takes an integer (seed) and returns a StdGen (an instance of RandomGen) object
+        random (mkStdGen 100) :: (Int, StdGen) -- (-3633736515773289454, 693699796 2103410263)
+        random (mkStdGen 100) :: (Float, StdGen) -- (0.6512469, 651872571 1655838864)
+        random (mkStdGen 100) :: (Bool, StdGen) -- (True, 4041414 40692)
+        
+        randoms :: (RandomGen g, Random a) => g -> [a]
+        -- randoms gen = let (r, newGen) = random gen in r:randoms newGen
+        take 10 $ randoms (mkStdGen 100) :: [Bool] -- [True,False,False,False,False,True,True,False,False,True]
+        
+        randomR :: (RandomGen g, Random a) => (a, a) -> g -> (a, g)
+        randomRs :: (RandomGen g, Random a) => (a, a) -> g -> [a]
+        -- returns random numbers from a range
+        randomR (1, 6) (mkStdGen 359353) -- (6, 1494289578 40692)
+        take 10 $ randomRs ('a','z') (mkStdGen 3) -- "xnuhlfwywq"
+
+        split :: RandomGen g => g -> (g, g)
+        -- splits a RandomGen into two
+
+        getStdGen :: IO StdGen
+        -- returns an arbitrary (but global) random number generator
+        newStdGen :: IO StdGen
+        -- splits global random number generator into two
+        -- returns one of them and sets the other as new global random number generator
+        setStdGen :: StdGen -> IO ()
+        -- set global random number generator
+        putStrLn.take 20.randomRs ('a','z') =<< getStdGen -- gakhumzjxeufgszweamz
+        putStrLn.take 20.randomRs ('a','z') =<< getStdGen -- gakhumzjxeufgszweamz (same as before)
+        putStrLn.take 20.randomRs ('a','z') =<< newStdGen -- pudcqjovwosqoecqdsrm
+        putStrLn.take 20.randomRs ('a','z') =<< getStdGen -- xisnznyvyorfnlxgilrh
+        putStrLn.take 20.randomRs ('a','z') =<< getStdGen -- xisnznyvyorfnlxgilrh (same as before)
+
+        getStdRandom :: (StdGen -> (a, StdGen)) -> IO a
+        getStdRandom' func = do
+            (a, g) <- return.func =<< getStdGen
+            setStdGen g
+            return a
+        randomIO :: Random a => IO a
+        -- equivalent to getStdRandom random
+        randomRIO :: Random a => (a, a) -> IO a
+        -- equivalent to getStdRandom.randomR
+        setStdGen (mkStdGen 5)
+        print =<< getStdRandom random -- -7960110334351034075
+        ```
+    - *9.7 - Bytestrings*
+- **Chapter 10 - Functionally Solving Problems**
+    - *10.1 - Reverse Polish Notation Calculator*
+
+        ```haskell
+        solveRPN :: String -> Double
+        solveRPN = head.foldl foldingFunction [].words
+            where  foldingFunction (x:y:ys) "*" = (y * x):ys
+                   foldingFunction (x:y:ys) "+" = (y + x):ys
+                   foldingFunction (x:y:ys) "-" = (y - x):ys
+                   foldingFunction xs number = read number:xs
+        ```
+    - *10.2 - Heathrow to London*
+        
+        ```haskell
+        shortest :: [(Int, Int, Int)] -> (Int, Int)
+        shortest [] = (0, 0)
+        shortest ((a, b, c):xs) = (a + min x (y + c), b + min (x + c) y) where
+            (x, y) = shortest xs
+
+        groupByThree :: [Int] -> [(Int, Int, Int)]
+        groupByThree [] = []
+        groupByThree (a:b:c:xs) = (a, b, c):(groupByThree xs)
+
+        main = getLine >>= return.(\x -> min (fst x) (snd x)).shortest.groupByThree.map read.words >>= print
+        ```
+- **Chapter 11 - Applicative Functors**
+    - *11.1 - Functors Redux*
+
+        ```haskell
+        instance Functor ((->) r) where
+            fmap f g = (\x -> f (g x)) -- fmap = (.)
+        -- fmap :: (a -> b) -> (r -> a) -> (r -> b)
+        ```
+        - `fmap` *lifts* a function
+
+            ```haskell
+            fmap :: (Functor f) => (a -> b) -> (f a -> f b)
+            ```
+    - *11.2 - Functor Laws*
+        - Law I - `fmap id = id`
+        - Law II - `fmap (f . g) = fmap f . fmap g`
 
 
 
