@@ -402,7 +402,7 @@ ISBN: 1593272839
             group [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7] -- [[1,1,1,1],[2,2,2,2],[3,3],[2,2,2],[5],[6],[7]]
             sort "abracadabra" -- aaaaabbcdrr
             tails [1,2,3] -- [[1,2,3],[2,3],[3],[]]
-            hawaii" `isPrefixOf` "hawaii joe" -- True
+            "hawaii" `isPrefixOf` "hawaii joe" -- True
             "art" `isInfixOf` "party" -- True
             any (>5) [1..] -- True
             all (>5) [1..] -- False
