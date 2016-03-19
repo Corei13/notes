@@ -31,8 +31,8 @@ ISBN: 1593272839
         - 'let' keyword is used to define names in GHCI
 
             ```haskell
-            let lostNumbers = [4,8,15,16,23,42]
-            lostNumbers -- [4,8,15,16,23,42]
+            let listNumbers = [4,8,15,16,23,42]
+            listNumbers -- [4,8,15,16,23,42]
             ```
         - Single quote means character, double quotes means string
         - String is just a list of characters
@@ -43,7 +43,7 @@ ISBN: 1593272839
             "hello" ++ " " ++ "world" -- "hello world"
             ['w','o'] ++ ['o','t'] -- "woot"
             ```
-        - `:` operator (or *cons* operator) adds an element at the beginning of a lost (`O(1)`)
+        - `:` operator (or *cons* operator) adds an element at the beginning of a list (`O(1)`)
 
             ```haskell
             'A':" SMALL CAT" -- "A SMALL CAT"
@@ -53,7 +53,7 @@ ISBN: 1593272839
         - `!!` operator is used to access list elements
 
             ```haskell
-            [9.4,33.2,96.2,11.2,23.25] !! 1` -- 33.2
+            [9.4,33.2,96.2,11.2,23.25] !! 1 -- 33.2
             ```
         - Lists are compared in lexicographical order
         - Some list operations
@@ -130,7 +130,7 @@ ISBN: 1593272839
             ```
     - *2.3 - Type Variables*
     - *2.4 - Typeclasses 101*
-        - If a function is comprised only of special char- acters, it's considered an infix function by default. If we want to examine its type, pass it to another function or call it as a prefix function, we have to surround it in parentheses.
+        - If a function is comprised only of special characters, it's considered an infix function by default. If we want to examine its type, pass it to another function or call it as a prefix function, we have to surround it in parentheses.
 
             ```haskell
             (==) 8 8 -- True
@@ -146,7 +146,7 @@ ISBN: 1593272839
             ```
         - `show` transforms members of `Show` typeclass to `String`
         - `read` takes a string and returns a type of 'Read' typeclass
-        - `X::Type` can be used to transform a typeclass `X` to `Type` whre `Type` is of typeclass `X`
+        - `X::Type` can be used to transform a typeclass `X` to `Type` where `Type` is of typeclass `X`
 
             ```haskell
             show 5.334 -- "5.334"
@@ -156,7 +156,7 @@ ISBN: 1593272839
             maxBound :: Char -- '\1114111'
             maxBound :: (Bool, Int, Char) -- (True,2147483647,'\1114111')
             ```
-        - Some other typeclasses: `Integral`, `Floating
+        - Some other typeclasses: `Integral`, `Floating`
 - **Chapter 3 - Syntax In Functions**
     - *3.1 - Pattern matching*
         - Examples
@@ -187,7 +187,7 @@ ISBN: 1593272839
             ```haskell
             capital :: String -> String
             capital "" = "Empty string, whoops!"
-            capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
+            capital str@(x:xs) = "The first letter of " ++ str ++ " is " ++ [x]
             capital "Dracula" -- "The first letter of Dracula is D"
             ```
     - *3.2 - Guards, Guards!*
@@ -241,14 +241,14 @@ ISBN: 1593272839
 
             (let (a, b, c) = (1, 2, 3) in a*b*c, let foo="Hey "; bar = "there!" in foo ++ bar) -- (6,"Hey there!")
             ```
-        - 'let' in list comprehension
+        - `let` in list comprehension
 
 
             ```haskell
             calcBmis :: [(Double, Double)] -> [Double]
             calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi > 25.0]
             ```
-            The `(w, h) <- xs` is called *generator*. `bmi` can't be refered in the generator, because that is defined prior to the `let` binding.
+            The `(w, h) <- xs` is called *generator*. `bmi` can't be referred in the generator, because that is defined prior to the `let` binding.
         - `case` expression
 
             ```
@@ -284,7 +284,7 @@ ISBN: 1593272839
 - **Chapter 5 - Higher-Order Functions**
     - *5.1 - Curried Functions*
         - Infix functions can be curried by *sections*. ``a `func` b`` is equivalent to ``(`func` b) a``
-        - Be careful about negetive numbers. `(-4)` should have been ``(subtract 4)``, instead it is just `-4`
+        - Be careful about negative numbers. `(-4)` should have been `(subtract 4)`, instead it is just `-4`
     - *5.2 - Some Higher-Orderism Is in Order*
         - Implementing flip
 
@@ -296,7 +296,7 @@ ISBN: 1593272839
             flip' f y x = f x y -- this works because flip' f x y also defines flip' f x and flip' f
             ```
     - *5.3 - The Functional Programmer’s Toolbox*
-        - `takeWhile :: (a -> Bool) -> [a] -> [a]` returns begining of a list until `f` is true
+        - `takeWhile :: (a -> Bool) -> [a] -> [a]` returns beginning of a list until `f` is true
 
             ```haskell
             takeWhile (< 5) [1..] -- [1, 2, 3, 4]
@@ -328,7 +328,7 @@ ISBN: 1593272839
         map' f = foldr (\x acc -> f x : acc) []
 
         elem' :: (Eq a) => a -> [a] -> Bool
-        elem' y ys = foldr (\x acc -> if x == y then True else acc) False ys
+        elem' y = foldr (\x acc -> if x == y then True else acc) False
 
         reverse' :: [a] -> [a]
         reverse' = foldl (\acc x -> x : acc) [] -- foldl (flip(:)) []
@@ -451,6 +451,7 @@ ISBN: 1593272839
             -- Takes a function and apply that on duplicates
             Map.fromListWith (++) [(1, [1]), (1, [2]), (2, [1])] -- fromList [(1,[2,1]),(2,[1])]
             Map.fromListWith max [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)] -- fromList [(2,100),(3,29),(4,22)]
+            ```
     - *6.4 - Making Our Own Modules*
         - Sample module
 
@@ -490,7 +491,8 @@ ISBN: 1593272839
         - To export constructor from module use `(..)`
 
             ```haskell
-            module Point ( Point(..), ... ) where
+            module Geometry ( Shape(..), ... ) where
+            -- Shape(..) is equivalent to Shape(Circle, Rectangle)
             ...
             ```
     - *7.3 - Record Syntax*
@@ -555,7 +557,7 @@ ISBN: 1593272839
             data Either a b = Left a | Right b deriving (Eq, Ord, Read, Show)
             ```
     - *7.7 - Recursive data structures*
-        - Defining custop list
+        - Defining custom list
 
             ```haskell
             data List a = Empty | Cons { listHead :: a, listTail :: List a} deriving (Show, Read, Eq, Ord)
@@ -575,7 +577,7 @@ ISBN: 1593272839
 
             (3 :-: 4 :-: 5 :-: Empty) -- 3 :-: (4 :-: (5 :-: Empty))
 
-            -- :-: can noe be used to match pattern
+            -- :-: can now be used to match pattern
             infixr 5  .++
             (.++) :: List a -> List a -> List a
             Empty .++ ys = ys
@@ -616,7 +618,7 @@ ISBN: 1593272839
                 x /= y = not (x == y)
             ```
             Because `==` was defined in terms of `/=` and vice versa in the class declaration, we only had to overwrite one of them in the instance declaration. That's called the minimal complete definition for the typeclass — the minimum of functions that we have to implement so that our type can behave like the class advertises. To fulfill the minimal complete definition for Eq, we have to overwrite either one of `==` or `/=`.
-        - Examples of typeclass instanciation
+        - Examples of typeclass instantiation
 
             ```haskell
             data TrafficLight = Red | Yellow | Green
@@ -673,11 +675,11 @@ ISBN: 1593272839
                 abs :: a -> a
                 signum :: a -> a
                 fromInteger :: Integer -> a
-                    -- Defined in `GHC.Num'
-            instance Num Integer -- Defined in `GHC.Num'
-            instance Num Int -- Defined in `GHC.Num'
-            instance Num Float -- Defined in `GHC.Float'
-            instance Num Double -- Defined in `GHC.Float'
+                    -- Defined in `GHC.Num`
+            instance Num Integer -- Defined in `GHC.Num`
+            instance Num Int -- Defined in `GHC.Num`
+            instance Num Float -- Defined in `GHC.Float`
+            instance Num Double -- Defined in `GHC.Float`
 
             > :info (+)
 
@@ -870,10 +872,10 @@ ISBN: 1593272839
             ```
     - *9.2 - Reading and Writing Files*
         - `Handle`
-            
+
             ```haskell
             import System.IO
-            
+
             main = do
                 handle <- openFile "sample.txt" ReadMode
                 -- openFile :: FilePath -> IOMode -> IO Handle
@@ -882,7 +884,7 @@ ISBN: 1593272839
 
                 contents <- hGetContents handle
                 -- hGetContents :: Handle -> IO String
-                
+
                 putStr contents
                 hClose handle
                 -- hClose :: Handle -> IO ()
@@ -939,11 +941,11 @@ ISBN: 1593272839
         random (mkStdGen 100) :: (Int, StdGen) -- (-3633736515773289454, 693699796 2103410263)
         random (mkStdGen 100) :: (Float, StdGen) -- (0.6512469, 651872571 1655838864)
         random (mkStdGen 100) :: (Bool, StdGen) -- (True, 4041414 40692)
-        
+
         randoms :: (RandomGen g, Random a) => g -> [a]
         -- randoms gen = let (r, newGen) = random gen in r:randoms newGen
         take 10 $ randoms (mkStdGen 100) :: [Bool] -- [True,False,False,False,False,True,True,False,False,True]
-        
+
         randomR :: (RandomGen g, Random a) => (a, a) -> g -> (a, g)
         randomRs :: (RandomGen g, Random a) => (a, a) -> g -> [a]
         -- returns random numbers from a range
@@ -991,7 +993,7 @@ ISBN: 1593272839
                    foldingFunction xs number = read number:xs
         ```
     - *10.2 - Heathrow to London*
-        
+
         ```haskell
         shortest :: [(Int, Int, Int)] -> (Int, Int)
         shortest [] = (0, 0)
@@ -1020,19 +1022,3 @@ ISBN: 1593272839
     - *11.2 - Functor Laws*
         - Law I - `fmap id = id`
         - Law II - `fmap (f . g) = fmap f . fmap g`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
