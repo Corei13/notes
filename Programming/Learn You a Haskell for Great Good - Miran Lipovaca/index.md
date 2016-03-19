@@ -799,7 +799,7 @@ ISBN: 1593272839
             -- hence name has type String
 
             _ <- putStrLn "Hello World!"
-            -- putStrLn retuns a IO ()
+            -- putStrLn returns a IO ()
             -- hence _ has type ()
             ```
         - `let` is used inside `do` block to bind pure values to names
